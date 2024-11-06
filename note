@@ -1,0 +1,5 @@
+npx sequelize-cli model:generate --name Supplier --attributes name:string,address:string,phoneNumber:string
+npx sequelize-cli model:generate --name Product --attributes name:string,qty:integer,purchasePrice:integer,sellingPrice:integer
+npx sequelize-cli model:generate --name ProductSupplier --attributes SuppliersId:integer,ProductsId:integer
+npx sequelize-cli model:generate --name User --attributes username:string,password:string,email:string,role:string
+npx sequelize-cli model:generate --name UserProfile --attributes name:string,birthOfDate:date,gender:string
