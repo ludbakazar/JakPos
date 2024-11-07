@@ -147,3 +147,21 @@ exports.updateSupplier = async (req, res) => {
     res.send(error.message);
   }
 };
+
+exports.addSupplier = async (req, res) => {
+  try {
+    res.render("addSupplier");
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
+exports.saveSupplier = async (req, res) => {
+  const data = req.body;
+  try {
+    await Supplier.create(data);
+    res.redirect("/supplier/home");
+  } catch (error) {
+    res.send(error.message);
+  }
+};

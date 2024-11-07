@@ -14,6 +14,8 @@ const {
   detailSupplier,
   editSupplier,
   updateSupplier,
+  addSupplier,
+  saveSupplier,
 } = require("./controllers/controller");
 const app = express();
 const port = 3000;
@@ -33,6 +35,8 @@ app.post("/products/stock/:id/edit", updateProduct);
 app.get("/products/stock/:id/delete", deleteProduct);
 app.get("/supplier/home", homeSupplier);
 app.get("/supplier", showSupplier);
+app.get("/supplier/add", addSupplier);
+app.post("/supplier/add", saveSupplier);
 app.get("/supplier/:id/detail", detailSupplier);
 app.get("/supplier/:id/edit", editSupplier);
 app.post("/supplier/:id/edit", updateSupplier);
