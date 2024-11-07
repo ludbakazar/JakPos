@@ -35,3 +35,38 @@ exports.detailProduct = async (req, res) => {
     res.send(error.message);
   }
 };
+
+exports.editProduct = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  try {
+    const data = await Product.findByPk(id, { include: { model: Supplier } });
+    const supplier = await Supplier.findAll();
+    res.render("editProduct", { data, supplier });
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
+exports.updateProduct = async (req, res) => {
+  const supplierId = req.body.SupplierId;
+  const { SupplierId, ...data } = req.body;
+  const { id } = req.params;
+
+  try {
+    const product = await Product.findByPk(id);
+    await product.update(data);
+    await product.setSuppliers(supplierId);
+    res.redirect(`/products/stock/${id}`);
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
+exports.addProduct = async (req, res) => {
+  try {
+    res.send("ad");
+  } catch (error) {
+    res.send(error.message);
+  }
+};
