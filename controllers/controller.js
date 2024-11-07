@@ -1,4 +1,10 @@
-const { Supplier, Product, ProductSupplier } = require("../models");
+const {
+  Supplier,
+  Product,
+  ProductSupplier,
+  User,
+  UserProfile,
+} = require("../models");
 const formatedPrice = require("../helpers/fortmatedPrice");
 const { where, Op } = require("sequelize");
 exports.home = async (req, res) => {
@@ -8,6 +14,7 @@ exports.home = async (req, res) => {
     res.send(error);
   }
 };
+
 exports.homeProduct = async (req, res) => {
   try {
     res.render("homeProduct");
@@ -164,6 +171,46 @@ exports.saveSupplier = async (req, res) => {
   try {
     await Supplier.create(data);
     res.redirect("/supplier/home");
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
+exports.addUser = async (req, res) => {
+  try {
+    res.render("addUsers");
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
+exports.saveUser = async (req, res) => {
+  const data = req.body;
+  try {
+    const user = await User.create(data);
+    console.log(user.id);
+    res.redirect(`/user/${user.id}/userprofile`);
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
+exports.addUserProfile = async (req, res) => {
+  try {
+    res.render("addUsersProfile");
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
+exports.saveUserProfile = async (req, res) => {
+  const { id } = req.params;
+  const data = Object.assign({}, req.body, { UserId: id });
+  console.log(id);
+  console.log(data);
+  try {
+    await UserProfile.create(data);
+    res.redirect("/home");
   } catch (error) {
     res.send(error.message);
   }

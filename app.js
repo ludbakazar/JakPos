@@ -16,6 +16,10 @@ const {
   updateSupplier,
   addSupplier,
   saveSupplier,
+  addUser,
+  saveUser,
+  addUserProfile,
+  saveUserProfile,
 } = require("./controllers/controller");
 const app = express();
 const port = 3000;
@@ -23,7 +27,12 @@ const port = 3000;
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", home);
+app.get("/user/create", addUser);
+app.post("/user/create", saveUser);
+app.get("/user/:id/userprofile", addUserProfile);
+app.post("/user/:id/userprofile", saveUserProfile);
+
+app.get("/home", home);
 app.get("/products/home", homeProduct);
 app.get("/products/add", addProduct);
 app.post("/products/add", saveProduct);
