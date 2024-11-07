@@ -1,21 +1,5 @@
 const express = require("express");
 const {
-  home,
-  homeProduct,
-  stockProduct,
-  detailProduct,
-  editProduct,
-  updateProduct,
-  addProduct,
-  saveProduct,
-  deleteProduct,
-  homeSupplier,
-  showSupplier,
-  detailSupplier,
-  editSupplier,
-  updateSupplier,
-  addSupplier,
-  saveSupplier,
   addUser,
   saveUser,
   addUserProfile,
@@ -31,6 +15,7 @@ const session = require("express-session");
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
+const router = require("./routers/main");
 
 app.use(
   session({
@@ -59,25 +44,7 @@ app.get("/user/:id/userprofile", addUserProfile);
 app.post("/user/:id/userprofile", saveUserProfile);
 
 app.use(checkSession);
-
-app.get("/user", showUser);
-app.get("/home", home);
-app.get("/products/home", homeProduct);
-app.get("/products/add", addProduct);
-app.post("/products/add", saveProduct);
-
-app.get("/products/stock", stockProduct);
-app.get("/products/stock/:id", detailProduct);
-app.get("/products/stock/:id/edit", editProduct);
-app.post("/products/stock/:id/edit", updateProduct);
-app.get("/products/stock/:id/delete", deleteProduct);
-app.get("/supplier/home", homeSupplier);
-app.get("/supplier", showSupplier);
-app.get("/supplier/add", addSupplier);
-app.post("/supplier/add", saveSupplier);
-app.get("/supplier/:id/detail", detailSupplier);
-app.get("/supplier/:id/edit", editSupplier);
-app.post("/supplier/:id/edit", updateSupplier);
+app.use(router);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
