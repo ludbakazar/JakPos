@@ -26,8 +26,11 @@ exports.stockProduct = async (req, res) => {
 };
 
 exports.detailProduct = async (req, res) => {
+  const { id } = req.params;
   try {
-    res.send("akkd");
+    const data = await Product.findByPk(id, { include: { model: Supplier } });
+    // res.send(data);
+    res.render("detailProduct", { data, formatedPrice });
   } catch (error) {
     res.send(error.message);
   }
