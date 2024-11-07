@@ -1,5 +1,6 @@
 const { Supplier, Product, ProductSupplier } = require("../models");
 const formatedPrice = require("../helpers/fortmatedPrice");
+const { where, Op } = require("sequelize");
 exports.home = async (req, res) => {
   try {
     res.render("beranda");
@@ -16,8 +17,22 @@ exports.homeProduct = async (req, res) => {
 };
 
 exports.stockProduct = async (req, res) => {
+  const { keyword } = req.query;
   try {
-    const data = await Product.findAll({ include: { model: Supplier } });
+    const option = {
+      include: {
+        model: Supplier,
+      },
+      where: {},
+    };
+
+    if (keyword) {
+      option.where.name = {
+        [Op.iLike]: `%${keyword}%`,
+      };
+    }
+
+    const data = await Product.findAll(option);
     // res.send(data);
     res.render("stockProduct", { data, formatedPrice });
   } catch (error) {

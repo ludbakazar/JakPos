@@ -15,6 +15,18 @@
     <%- include('./_header.ejs') %>
     <br />
     <h3 style="text-align: center">Stock Product</h3>
+    <div class="container-fluid">
+      <form class="d-flex" role="search">
+        <input
+          class="form-control me-2"
+          type="search"
+          placeholder="Search"
+          name="keyword"
+          aria-label="Search"
+        />
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
     <table class="table">
       <thead>
         <tr>
