@@ -17,6 +17,20 @@ exports.home = async (req, res) => {
   }
 };
 
+exports.showUser = async (req, res) => {
+  const { username } = req.session.user;
+  try {
+    const data = await User.findOne({
+      include: UserProfile,
+      where: { username: username },
+    });
+    // res.send(data);
+    res.render("userProfile", { data });
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
 exports.homeProduct = async (req, res) => {
   try {
     res.render("homeProduct");
@@ -50,11 +64,14 @@ exports.detailProduct = async (req, res) => {
 
 exports.editProduct = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
+  let { errors } = req.query;
+  if (errors) {
+    errors = errors.split(",");
+  }
   try {
     const data = await Product.findByPk(id, { include: { model: Supplier } });
     const supplier = await Supplier.findAll();
-    res.render("editProduct", { data, supplier });
+    res.render("editProduct", { data, supplier, errors });
   } catch (error) {
     res.send(error.message);
   }
@@ -71,15 +88,25 @@ exports.updateProduct = async (req, res) => {
     await product.setSuppliers(supplierId);
     res.redirect(`/products/stock/${id}`);
   } catch (error) {
-    res.send(error.message);
+    if (error.name == "SequelizeValidationError") {
+      const err = error.errors.map((el) => {
+        return el.message;
+      });
+      res.redirect(`/products/stock/${id}/edit?errors=${err}`);
+    } else {
+      res.redirect(`/products/stock/${id}/edit?errors=${error.message}`);
+    }
   }
 };
 
 exports.addProduct = async (req, res) => {
+  let { errors } = req.query;
+  if (errors) {
+    errors = errors.split(",");
+  }
   try {
     const supplier = await Supplier.findAll();
-    // res.send(supplier);
-    res.render("addProduct", { supplier });
+    res.render("addProduct", { supplier, errors });
   } catch (error) {
     res.send(error.message);
   }
@@ -93,7 +120,14 @@ exports.saveProduct = async (req, res) => {
     await product.addSupplier(supplierId);
     res.redirect("/products/home");
   } catch (error) {
-    res.send(error.message);
+    if (error.name == "SequelizeValidationError") {
+      const err = error.errors.map((el) => {
+        return el.message;
+      });
+      res.redirect(`/products/add?errors=${err}`);
+    } else {
+      res.redirect(`/products/add?errors=${error.message}`);
+    }
   }
 };
 
@@ -131,7 +165,6 @@ exports.detailSupplier = async (req, res) => {
   const { id } = req.params;
   try {
     const data = await Supplier.findByPk(id, { include: { model: Product } });
-    // res.send(data);
     res.render("detailSupplier", { data, formatedPrice });
   } catch (error) {
     res.send(error.message);
@@ -140,9 +173,13 @@ exports.detailSupplier = async (req, res) => {
 
 exports.editSupplier = async (req, res) => {
   const { id } = req.params;
+  let { errors } = req.query;
+  if (errors) {
+    errors = errors.split(",");
+  }
   try {
     const data = await Supplier.findByPk(id);
-    res.render("editSupplier", { data });
+    res.render("editSupplier", { data, errors });
   } catch (error) {
     res.send(error.message);
   }
@@ -156,13 +193,24 @@ exports.updateSupplier = async (req, res) => {
     await supplier.update(data);
     res.redirect("/supplier");
   } catch (error) {
-    res.send(error.message);
+    if (error.name == "SequelizeValidationError") {
+      const err = error.errors.map((el) => {
+        return el.message;
+      });
+      res.redirect(`/supplier/${id}/edit?errors=${err}`);
+    } else {
+      res.redirect(`/supplier/${id}/edit?errors=${error.message}`);
+    }
   }
 };
 
 exports.addSupplier = async (req, res) => {
+  let { errors } = req.query;
+  if (errors) {
+    errors = errors.split(",");
+  }
   try {
-    res.render("addSupplier");
+    res.render("addSupplier", { errors });
   } catch (error) {
     res.send(error.message);
   }
@@ -174,7 +222,14 @@ exports.saveSupplier = async (req, res) => {
     await Supplier.create(data);
     res.redirect("/supplier/home");
   } catch (error) {
-    res.send(error.message);
+    if (error.name == "SequelizeValidationError") {
+      const err = error.errors.map((el) => {
+        return el.message;
+      });
+      res.redirect(`/supplier/add?errors=${err}`);
+    } else {
+      res.redirect(`/supplier/add?errors=${error.message}`);
+    }
   }
 };
 
@@ -239,6 +294,19 @@ exports.logged = async (req, res) => {
     } else {
       res.redirect("/login");
     }
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
+exports.logout = async (req, res) => {
+  try {
+    req.session.destroy((err) => {
+      if (err) {
+        res.send("Could not log out.");
+      }
+      res.redirect("/login");
+    });
   } catch (error) {
     res.send(error.message);
   }

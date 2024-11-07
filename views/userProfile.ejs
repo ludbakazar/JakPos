@@ -16,48 +16,41 @@
 
     <div class="container text-center">
       <div class="row justify-content-center">
-        <div class="col-md-6 text-center">
-          <!-- Centering the image and content -->
-          <img
-            src="<%= data.imageUrl %>"
-            class="rounded img-fluid"
-            alt="Product Image"
-          />
-        </div>
         <div class="col-md-6">
-          <h3>Detail Products</h3>
+          <h3>User Detail</h3>
           <table class="table">
             <tbody class="table-group-divider">
               <tr>
-                <th scope="row">Nama Produk</th>
-                <td><%= data.name %></td>
+                <th scope="row">Username</th>
+                <td><%= data.username %></td>
               </tr>
               <tr>
-                <th scope="row">Total Stock</th>
-                <td><%= data.qty %> Buah</td>
+                <th scope="row">Email</th>
+                <td><%= data.email %></td>
               </tr>
               <tr>
-                <th scope="row">Harga Beli</th>
-                <td><%= formatedPrice(data.purchasePrice) %></td>
+                <th scope="row">Role</th>
+                <td><%= data.role %></td>
               </tr>
               <tr>
-                <th scope="row">Harga Jual</th>
-                <td><%= formatedPrice(data.sellingPrice) %></td>
+                <th scope="row">Nama</th>
+                <td><%= data.UserProfile.name %></td>
               </tr>
               <tr>
-                <th scope="row">Supplier</th>
-                <td><%= data.Suppliers[0].name %></td>
+                <th scope="row">Birth Of Date</th>
+                <td><%= data.UserProfile.formatedDateWeb %></td>
+              </tr>
+              <tr>
+                <th scope="row">Gender</th>
+                <td><%= data.UserProfile.gender %></td>
               </tr>
             </tbody>
           </table>
-          <a href="/products/stock/<%= data.id %>/edit">
-            <button type="button" class="btn btn-primary">Edit</button>
-          </a>
         </div>
       </div>
       <br />
       <br />
-      <a href="/products/stock">
+      <a href="/home">
         <button type="button" class="btn btn-secondary">Kembali</button>
       </a>
     </div>

@@ -42,11 +42,46 @@ module.exports = (sequelize, DataTypes) => {
   }
   Product.init(
     {
-      name: DataTypes.STRING,
-      qty: DataTypes.INTEGER,
-      purchasePrice: DataTypes.INTEGER,
-      sellingPrice: DataTypes.INTEGER,
-      imageUrl: DataTypes.STRING,
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: { msg: "Nama tidak boleh kosong" },
+          notEmpty: { msg: "Nama tidak boleh kosong" },
+        },
+      },
+      qty: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notNull: { msg: "Stock tidak boleh kosong" },
+          notEmpty: { msg: "Stock tidak boleh kosong" },
+        },
+      },
+      purchasePrice: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notNull: { msg: "Harga Beli tidak boleh kosong" },
+          notEmpty: { msg: "Harga Beli tidak boleh kosong" },
+        },
+      },
+      sellingPrice: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notNull: { msg: "Harga Jual tidak boleh kosong" },
+          notEmpty: { msg: "Harga Jual tidak boleh kosong" },
+        },
+      },
+      imageUrl: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notNull: { msg: "Image tidak boleh kosong" },
+          notEmpty: { msg: "Image tidak boleh kosong" },
+        },
+      },
     },
     {
       sequelize,
