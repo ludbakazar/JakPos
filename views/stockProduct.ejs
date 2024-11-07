@@ -15,6 +15,31 @@
     <%- include('./_header.ejs') %>
     <br />
     <h3 style="text-align: center">Stock Product</h3>
+
+    <div class="container text-center">
+      <div class="row justify-content-center align-items-start">
+        <div class="col-auto">
+          <div class="card" style="width: 18rem">
+            <div class="card-body">
+              <h5 class="card-title">Total Stock</h5>
+              <h1 class="card-subtitle mb-2 text-body-secondary">
+                <%= summary.totalProduct %>
+              </h1>
+            </div>
+          </div>
+        </div>
+        <div class="col-auto">
+          <div class="card" style="width: 25rem">
+            <div class="card-body">
+              <h5 class="card-title">Total Harga Beli</h5>
+              <h1 class="card-subtitle mb-2 text-body-secondary">
+                <%= formatedPrice(Number(summary.totalHargaBeli)) %>
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    <br />
     <div class="container-fluid">
       <form class="d-flex" role="search">
         <input
