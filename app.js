@@ -7,6 +7,7 @@ const {
   editProduct,
   updateProduct,
   addProduct,
+  saveProduct,
 } = require("./controllers/controller");
 const app = express();
 const port = 3000;
@@ -17,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", home);
 app.get("/products", homeProduct);
 app.get("/products/add", addProduct);
+app.post("/products/add", saveProduct);
 
 app.get("/products/stock", stockProduct);
 app.get("/products/stock/:id", detailProduct);

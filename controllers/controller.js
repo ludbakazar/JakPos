@@ -65,7 +65,21 @@ exports.updateProduct = async (req, res) => {
 
 exports.addProduct = async (req, res) => {
   try {
-    res.send("ad");
+    const supplier = await Supplier.findAll();
+    // res.send(supplier);
+    res.render("addProduct", { supplier });
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
+exports.saveProduct = async (req, res) => {
+  const supplierId = req.body.SupplierId;
+  const { SupplierId, ...data } = req.body;
+  try {
+    const product = await Product.create(data);
+    await product.addSupplier(supplierId);
+    res.redirect("/products");
   } catch (error) {
     res.send(error.message);
   }
