@@ -84,3 +84,66 @@ exports.saveProduct = async (req, res) => {
     res.send(error.message);
   }
 };
+
+exports.deleteProduct = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await ProductSupplier.destroy({ where: { ProductId: id } });
+    const deletedProduct = await Product.findByPk(id);
+    await deletedProduct.destroy();
+    res.redirect("/products/stock");
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
+exports.homeSupplier = async (req, res) => {
+  try {
+    res.render("homeSupplier");
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
+exports.showSupplier = async (req, res) => {
+  try {
+    const data = await Supplier.findAll();
+    // res.send(data);
+    res.render("supplier", { data });
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
+exports.detailSupplier = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const data = await Supplier.findByPk(id, { include: { model: Product } });
+    // res.send(data);
+    res.render("detailSupplier", { data, formatedPrice });
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
+exports.editSupplier = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const data = await Supplier.findByPk(id);
+    res.render("editSupplier", { data });
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
+exports.updateSupplier = async (req, res) => {
+  const data = req.body;
+  const { id } = req.params;
+  try {
+    const supplier = await Supplier.findByPk(id);
+    await supplier.update(data);
+    res.redirect("/supplier");
+  } catch (error) {
+    res.send(error.message);
+  }
+};
