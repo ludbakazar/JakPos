@@ -7,6 +7,8 @@ const {
 } = require("../models");
 const formatedPrice = require("../helpers/fortmatedPrice");
 const { where, Op } = require("sequelize");
+const bcrypt = require("bcryptjs");
+
 exports.home = async (req, res) => {
   try {
     res.render("beranda");
@@ -211,6 +213,32 @@ exports.saveUserProfile = async (req, res) => {
   try {
     await UserProfile.create(data);
     res.redirect("/home");
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
+exports.login = async (req, res) => {
+  try {
+    res.render("login");
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
+exports.logged = async (req, res) => {
+  const data = req.body;
+  try {
+    const user = await User.findOne({ where: { username: data.username } });
+    const log = await bcrypt.compare(data.password, user.password);
+    if (log) {
+      req.session.user = {
+        username: user.username,
+      };
+      res.redirect("/home");
+    } else {
+      res.redirect("/login");
+    }
   } catch (error) {
     res.send(error.message);
   }
