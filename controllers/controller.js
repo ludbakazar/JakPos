@@ -263,8 +263,7 @@ exports.addUserProfile = async (req, res) => {
 exports.saveUserProfile = async (req, res) => {
   const { id } = req.params;
   const data = Object.assign({}, req.body, { UserId: id });
-  console.log(id);
-  console.log(data);
+
   try {
     await UserProfile.create(data);
     res.redirect("/home");
@@ -274,8 +273,13 @@ exports.saveUserProfile = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
+  const { id } = req.params;
+  let { errors } = req.query;
+  if (errors) {
+    errors = errors.split(",");
+  }
   try {
-    res.render("login");
+    res.render("login", { errors });
   } catch (error) {
     res.send(error.message);
   }
@@ -292,7 +296,8 @@ exports.logged = async (req, res) => {
       };
       res.redirect("/home");
     } else {
-      res.redirect("/login");
+      const err = "Invalid username or password";
+      res.redirect(`/login?errors=${err}`);
     }
   } catch (error) {
     res.send(error.message);
